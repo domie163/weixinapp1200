@@ -1,0 +1,8 @@
+{
+  "navigationBarBackgroundColor": "#47EDB5",
+  "navigationBarTextStyle": "white",
+  "navigationBarTitleText": "已到报告添加",
+  "usingComponents": {
+    "w-picker": "/components/w-picker/w-picker"
+  }
+}

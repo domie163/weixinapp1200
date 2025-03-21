@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.JiaowuchuDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.username as username
+        ,a.password as password
+        ,a.jiaowuchu_name as jiaowuchuName
+        ,a.jiaowuchu_photo as jiaowuchuPhoto
+        ,a.sex_types as sexTypes
+        ,a.jiaowuchu_phone as jiaowuchuPhone
+        ,a.jiaowuchu_email as jiaowuchuEmail
+        ,a.jiaowuchu_delete as jiaowuchuDelete
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.JiaowuchuView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM jiaowuchu  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.username != '' and params.username != null and params.username != 'null' ">
+                and a.username like CONCAT('%',#{params.username},'%')
+            </if>
+            <if test=" params.password != '' and params.password != null and params.password != 'null' ">
+                and a.password like CONCAT('%',#{params.password},'%')
+            </if>
+            <if test=" params.jiaowuchuName != '' and params.jiaowuchuName != null and params.jiaowuchuName != 'null' ">
+                and a.jiaowuchu_name like CONCAT('%',#{params.jiaowuchuName},'%')
+            </if>
+            <if test="params.sexTypes != null and params.sexTypes != ''">
+                and a.sex_types = #{params.sexTypes}
+            </if>
+            <if test=" params.jiaowuchuPhone != '' and params.jiaowuchuPhone != null and params.jiaowuchuPhone != 'null' ">
+                and a.jiaowuchu_phone like CONCAT('%',#{params.jiaowuchuPhone},'%')
+            </if>
+            <if test=" params.jiaowuchuEmail != '' and params.jiaowuchuEmail != null and params.jiaowuchuEmail != 'null' ">
+                and a.jiaowuchu_email like CONCAT('%',#{params.jiaowuchuEmail},'%')
+            </if>
+            <if test="params.jiaowuchuDeleteStart != null and params.jiaowuchuDeleteStart != ''">
+                <![CDATA[  and a.jiaowuchu_delete >= #{params.jiaowuchuDeleteStart}   ]]>
+            </if>
+            <if test="params.jiaowuchuDeleteEnd != null and params.jiaowuchuDeleteEnd != ''">
+                <![CDATA[  and a.jiaowuchu_delete <= #{params.jiaowuchuDeleteEnd}   ]]>
+            </if>
+             <if test="params.jiaowuchuDelete != null and params.jiaowuchuDelete != ''">
+                and a.jiaowuchu_delete = #{params.jiaowuchuDelete}
+             </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
